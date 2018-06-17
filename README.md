@@ -544,3 +544,35 @@ Caching and MongoDB
 >
 >The caching layer is only used for reading data. Writing data is going to always go over to the *mongo DB* instance. We need to make sure that anytime we write some amount of data we clear any data stored on the *cache server* that is related to the record that we just wrote or updated.
 >
+
+**Redis**
+>
+>Our caching server is going to be an instance of something called **Redis**.
+>
+>**Redis** is an **in-memory** data store.
+>
+>You can think of it as essentially a tiny *database* that runs in the *memory* of your machine and allows you to *read* and *write* data very quickly.
+>
+>**Redis** is a *data store* that operates only in *memory* and so that means that once it gets *turned off*, *restarted*, or anything like that all the data that sits inside of there is instantly **deleted** and **wiped**.
+>
+>So, in practive we only use **redis** for data that we feel kind of **OK** having suddenly *disappear* into thin air because a user can lose power or the users machine can be restarted.
+>
+>**Redis** is *very fast* for reading and writing data. All of these qualities come together to make it fantastic decision for handling something like a caching layer, where we want to make sure that it's very quick for reading data.
+>
+>To interact with this *redis server* we're going to be running on our local machines, we're going to use a library called ```redis``` (**npm package**), which is the *node* implementation of the **redis** library.
+>
+>Use ```brew install redis``` if you currently have **brew** already installed on your machine.
+>
+>Run ```brew services start redis``` to launch redis. You will get the following output in the terminal:
+```==>  Successfully started `redis` (label: homebrew.mxcl.redis)```
+>
+>To confirm that *redis* is working, you can run:
+```redis-cli ping```
+You will receive the following response:
+```
+$ redis-cli ping
+PONG
+```
+>
+>
+>
