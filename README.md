@@ -518,5 +518,29 @@ Caching and MongoDB
 >
 >A **full collection scan** is a collection scan where we have to look at every single record inside of a given collection. Which is an **extremely** expensive operation.
 >
+>**Cache Server**
 >
+>Any time *mongoose* issues a query it's going to first go over to the **cache server**. The **cache server** is going to check to see if that exact query has ever been issued before, if it hasn't then the server will take query and send it over to *mongo DB* and *mongo* will execute the query. The results of that query will go back to the *cache server*, the server will **store** the result of that query.
+>
+>The **cache server** will now know that any time it receives that query it will get that stored response.
+>
+>It's going to maintain a record between queries that are issued and responses that come back from those queries.
+>
+>The **cache server** will then take that response and send it back to *mongoose*, where *mongoose* will give that data to *express* and it eventually ends up inside of our application.
+>
+>Now, anytime that same exact query is issued again *mongoose* is going to send the same query over to the *cache server*, but this time if the cache server sees that the query has already been issued once  before it's not going to send the query onto *mongo DB*. Instead it's going to take the response to that query that it got the last time and immediately send it back over to *mongoose*.
+>
+>So there's no indices here or full table scan being done. Nothing is being sent to *mongo*.
+>
+>On the **cache server** we can imagine that there might be something similar to a data store inside there.
+>
+>It might be a key value *data store* where all the keys are some type of query that has already been issued before and the value might be the result of that query.
+>
+>An example would be the *key* are the *IDs* of the *records* that we've already looked up before. So imagine that *mongoose* issues a new query where ti tries to find a blog post with an *ID* of ```'123'```.  This query is going to flow into the *cache server*, where the *cache server* is going to check to see if it has a result for any query that was looking for an *ID* of ```'123'```. And if it does not exists, this query is then taken and sent on to the *mongo DB* instance. *Mongo DB* will execute this query, get a response and send it back.
+>
+>This result is sent back over to the *cache server*, the *cache server* takes the result and immediately sends it back to mongoose.
+>
+>Immediately right after that, the *cache server* will also take the **query** that was issued, and add that onto it's collection of queries that have been issued. And then it's going to take the results of that query and store it against that query.
+>
+>The caching layer is only used for reading data. Writing data is going to always go over to the *mongo DB* instance. We need to make sure that anytime we write some amount of data we clear any data stored on the *cache server* that is related to the record that we just wrote or updated.
 >
