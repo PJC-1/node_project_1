@@ -564,15 +564,62 @@ Caching and MongoDB
 >Use ```brew install redis``` if you currently have **brew** already installed on your machine.
 >
 >Run ```brew services start redis``` to launch redis. You will get the following output in the terminal:
-```==>  Successfully started `redis` (label: homebrew.mxcl.redis)```
+>```==>  Successfully started `redis` (label: homebrew.mxcl.redis)```
 >
 >To confirm that *redis* is working, you can run:
-```redis-cli ping```
-You will receive the following response:
-```
-$ redis-cli ping
-PONG
-```
+>```redis-cli ping```
+>You will receive the following response:
+>```
+>$ redis-cli ping
+>>PONG
+>```
 >
+>**Basic Commands with Redis**
 >
+>You can use the **node repl** to test out the **redis** functionality.
+>
+>Start the **node repl** by running the command:
+>```
+>node
+>```
+>
+>Require **redis** module:
+>```
+>> const redis = require('redis')
+>undefined
+>```
+>
+>Set the **redis** url (*by default it will use local host and port 6379*):
+>```
+>> const redisUrl = 'redis://127.0.0.1:6379'
+>undefined
+>```
+>
+>Then set a variable that will create an instance of **redis**, which takes the **redisUrl** as an argument:
+>```
+>> const client = redis.createClient(redisUrl)
+>undefined
+>```
+>
+>Calling ```client``` will then create the **redis** instance, and will out put a list of available methods.
+>
+>To add a **key** and **value**, use the ```.set()``` method, which takes ```2``` arguments (**key**, **value**):
+>```
+>> client.set('hi', 'there')
+>true
+>```
+>
+>To retrieve a **value**, you can use the ```.get()``` method, which will search by a **key** and return the **value**, this method takes ```2``` arguments (the **key** you want to search by, and a **call back** function):
+>```
+>> client.get('hi', (err, value) => console.log(value))
+>true
+>> there
+>```
+>
+>As a shortcut you can use ```console.log``` as the second argument instead of writing out the whole function. This will produce the same result as specifying the whole call back function with the **error** and **value** parameters:
+>```
+>> client.get('hi', console.log)
+>true
+>> null 'there'
+>```
 >
