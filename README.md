@@ -640,3 +640,38 @@ Caching and MongoDB
 >> null 'rot'
 >```
 >
+>**Redis will only accept numbers and strings**
+>
+>Here is an example of using a plain javascript object with redis:
+>```
+>> client.set('colors', { red: 'rojo'})
+>true
+> node_redis: Deprecated: The SET command contains a argument of type Object.
+>This is converted to "[object Object]" by using .toString() now and will return an error from v.3.0 on.
+>Please handle this in your code to make sure everything works as you intended it to.
+>client.get('colors', console.log)
+>true
+>> null '[object Object]'
+>```
+>
+>You will need to use ```JSON.stringify()``` on a javascript object in order to use it with Redis.
+>
+>**Example**:
+>```
+>>client.set('colors', JSON.stringify({ red: 'rojo'}))
+>true
+>> client.get('colors', console.log)
+>true
+>> null '{"red":"rojo"}'
+>```
+>
+>Notice, that the returned result is still in ```JSON``` format, so it would need to be parsed by using ```JSON.parse()```.
+>
+>**Example**:
+>```
+>>client.get('colors', (err, val) => console.log(JSON.parse(val)))
+>true
+>> { red: 'rojo' }
+>```
+>
+>
