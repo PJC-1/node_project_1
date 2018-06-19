@@ -623,3 +623,20 @@ Caching and MongoDB
 >> null 'there'
 >```
 >
+>Use ```hset()``` method to set a *nested-hash* in redis. This method take ```3``` arguments: **Key**, **Nested Key**, and the **Nested Value**.
+>
+>**hset example from node cli**:
+>```
+>> client.hset('german', 'red', 'rot')
+>true
+>```
+>
+>Then use ```hget()``` to retrieve the **nested value**. This method takes ```3``` arguments: **Key**, **Nested Key**, and **Call-Back function**.
+>
+>**gset example from node cli**:
+>```
+>> client.hget('german', 'red', console.log)
+>true
+>> null 'rot'
+>```
+>
