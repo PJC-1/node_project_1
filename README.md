@@ -749,4 +749,28 @@ Caching and MongoDB
 >
 >Once the **key** is set, using the ```get()``` we receive the ```'red'``` value the first time, but the second time we receive ```null``` for the value because the time out has ran out and the value was **expired**.
 >
+> **Implementing "chainable" functionality with prototype methods**
 >
+> In order to allow for **"chaining"** functionality with the ```Query``` instance, *i.e. from our route handler in the ```blogRoutes.js``` file*. Example:
+> ```
+>app.get('/api/blogs', requireLogin, async (req, res) => {
+>  const blogs = await Blog
+>    .find({ _user: req.user.id})
+>    .cache()
+>    .limit(10)
+>    .sort();
+>
+>  res.send(blogs);
+>});
+> ```
+>
+> We would need to make sure that we ```return this``` at the end of the ```cache``` method in the ```Query``` class. Example:
+> ```
+> mongoose.Query.prototype.cache = function() {
+>  this.useCache = true;
+>  return this;
+>}
+> ```
+>
+>
+> 
