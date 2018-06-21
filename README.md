@@ -674,4 +674,79 @@ Caching and MongoDB
 >> { red: 'rojo' }
 >```
 >
+>**Implementing Caching with Redis: Caching a query that finds all blog posts for a user**
+>
+>We will attempt to store the **query** as the **key** and the **result of the query** as the **value**.
+>
+>*We want query keys that are consistent but unique between query executions*.
+>
+>**Example Code**:
+>```
+>  app.get('/api/blogs', requireLogin, async (req, res) => {
+>    const redis = require('redis');
+>    const redisUrl = 'redis://127.0.0.1:6379';
+>    const client = redis.createClient(redisUrl);
+>    const util = require('util');
+>    client.get = util.promisify(client.get);
+>
+>    // Do we have any cached data in redis related
+>    // to this query
+>    const cachedBlogs = await client.get(req.user.id);
+>
+>    // if yes, then respond to the request right away
+>    // and return
+>
+>    if(cachedBlogs) {
+>      console.log('SERVING FROM CACHE');
+>      return res.send(JSON.parse(cachedBlogs));
+>    }
+>
+>    // if no, we need to resond to request
+>    // and update our cache to store the data
+>
+>    const blogs = await Blog.find({ _user: req.user.id });
+>
+>    console.log('SERVING FROM MONGO');
+>    res.send(blogs);
+>    client.set(req.user.id, JSON.stringify(blogs));
+>  });
+>```
+>
+>**Problems with the current implementation, and possible solutions**
+>- *Caching code isn't easily reusable anywhere else in our codebase*.
+> **Solution**: Hook into Mongoose's query generation and execution process.
+>- *Cached values never expire*.
+> **Solution**: Add timeout values assigned to redis. Also add ability to reset all values tied to some specific event.
+>- *Cache keys won't work when we introduce other collections or query options*.
+> **Solution**: Figure out a more robust solution for generating cache keys.
+>
+>**3 ways to execute queries in mongoose**
+>- ```query.exec((err, result) => console.log(result));```
+>- ```query.then(result => console.log(result));```
+>- ```const query = await query;```
+>
+>**Using timeout with redis**
+>
+>**Example Code**:
+>```
+>> client.set('color', 'red')
+>true
+>> client.get('color', console.log)
+>true
+>> null 'red'
+>client.set('color', 'red', 'EX', 5)
+>true
+>> client.get('color', console.log)
+>true
+>> null 'red'
+>> client.get('color', console.log)
+>true
+>> null null
+>> client.get('color', console.log)
+>```
+>
+>We see that the *value* for color is set initially, then it is set again this time with **2** additional arguments to include the number of seconds before the value will **expire**(```'EX'```).
+>
+>Once the **key** is set, using the ```get()``` we receive the ```'red'``` value the first time, but the second time we receive ```null``` for the value because the time out has ran out and the value was **expired**.
+>
 >
