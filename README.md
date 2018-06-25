@@ -772,5 +772,9 @@ Caching and MongoDB
 >}
 > ```
 >
+> **Buffer module**
 >
+> We can use the ```Buffer``` module to convert ```base64``` to ```utf8```.
+>
+> Using the ```Buffer.from()``` method can be used.
 > 
