@@ -777,4 +777,47 @@ Caching and MongoDB
 > We can use the ```Buffer``` module to convert ```base64``` to ```utf8```.
 >
 > Using the ```Buffer.from()``` method can be used.
+>
+> **Using Mongo Shell**
+> Run the ```mongo.exe``` file at ```/usr/local/opt/mongodb/bin``` to open a new shell.
+>
+> Some helpful commands:
+> - ```cls``` => *clear screen*
+> - ```show dbs``` => *list all databases*
+> - ```use <DATABASE NAME>``` => *either create a new database/ switch to that specific database*
+> - ```show collections``` => *list existing collections/resources in that database*
+> - ```db.<COLLECTION NAME>.find()``` => *list all data entires from the specified collection*
+>
+> *Example from the terminal*:
+> ```
+>$ pwd
+>/usr/local/opt/mongodb/bin
+>
+>$ mongo
+>MongoDB shell version v3.4.6
+>connecting to: mongodb://127.0.0.1:27017
+>MongoDB server version: 3.4.6
+>Server has startup warnings:
+>2015-01-01T05:01:01.007-0700 I CONTROL  [initandlisten]
+>2015-01-01T05:01:01.007-0700 I CONTROL  [initandlisten] WARNING: Access control is not enabled for the database.
+>2015-01-01T05:01:01.007-0700 I CONTROL  [initandlisten] Read and write access to data and configuration is unrestricted.
+>2015-01-01T05:01:01.007-0700 I CONTROL  [initandlisten]
+>2015-01-01T05:01:01.007-0700 I CONTROL  [initandlisten]
+>2015-01-01T05:01:01.007-0700 I CONTROL  [initandlisten] >WARNING: soft rlimits too low. Number of files is 256, should be at least 1000
+>
+>> show dbs
+>example1  0.000GB
+>
+>blog_dev 0.000GB
+>> use blog_dev
+>switched to db blog_dev
+>
+>> show collections
+>blogs
+>users
+>
+>> db.users.find()
+>{ "_id" : ObjectId("0a1234b5cde678910f11gh12"), "googleId" : "01234567891011112131415", "displayName" : "EXAMPLE_ID", "__v" : 0 }
+>
+> ```
 > 
