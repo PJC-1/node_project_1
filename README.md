@@ -820,4 +820,33 @@ Caching and MongoDB
 >{ "_id" : ObjectId("0a1234b5cde678910f11gh12"), "googleId" : "01234567891011112131415", "displayName" : "EXAMPLE_ID", "__v" : 0 }
 >
 > ```
+>
+> **Passport, Session, & Authentication**
+>
+> When a ```request``` comes into our *server*, it is passed off to a series of different ```middlewares``` that have been wired up inside of our *server* (```cookie-session``` and ```passport```).
+>  
+> These two ```middlewares``` do some operation on that incoming *request* to modify it or basically do something with it.
+>
+> The request will follow this workflow:
+> - It is going to pull of property ```session``` and ```session.sig``` directly off of that ```cookie```. These properties are going to be tacked on to every request to our server.
+>
+> - After ```cookie-session``` pulls those two properties off. It's going to use that ```session.sig``` property to make sure that the ```session``` itself was not somehow manipulated. The **security** in place comes from the ```session.sig``` property (```session.sig``` is short for *session signature*). That is what makes sure that someone has not somehow messed around with that value.
+>
+> - After ```cookie-session``` verifies that the **session** has not been *modified* or *tampered* in any way, it then *decodes* it into a plain javascript object.
+>
+> - That new javascript object is placed on the ```req.session``` property of our *request*. That is all ```cookie-session``` does.
+>
+> - The request then flows from ```cookie-session``` onto the next middleware which is ```passport```. Internally ```passport``` looks at that ```req.session``` property. It looks at that object specifically for ```req.session.passport.user```. In other words it looks specifically for the ```id``` of the ```user```.
+>
+> - ```passport``` takes that ```id``` and then it passes it off to the function ```deserializeUser```, which is defined inside of our ```passport.js``` file.
+>
+> ```
+> passport.deserializeUser((id, done) => {
+>  User.findById(id).then(user => {
+>    done(null, user);
+>  });
+>});
+> ```
+>
+> The first argument is the ```id``` that comes directly off of that ```cookie-session``` object. The function takes that ```id``` and turn it into an actual ```user record```.
 > 
