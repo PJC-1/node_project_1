@@ -848,5 +848,11 @@ Caching and MongoDB
 >});
 > ```
 >
-> The first argument is the ```id``` that comes directly off of that ```cookie-session``` object. The function takes that ```id``` and turn it into an actual ```user record```.
-> 
+> The first argument is the ```id``` that comes directly off of that ```cookie-session``` object. The function takes that ```id``` and turn it into an actual ```user record```. This is done by looking inside the **Mongo database**, try to find a **user** with that particular **ID** and then we call the **callback** with the *user* that was just found.
+>
+> After ```deserializeUser``` is *executed* **passport** runs the *deserisalize* function thats defined, it takes the user that is return and it assigns that user to the ```req.user``` property.
+>
+> So then, in all of the **request handlers** moving forward, you will have access to the current **user** by referencing ```req.user```.
+>
+> After **passport** is done with that, the request then goes on to whatever particular request handler is being executed inside of our application.
+>
