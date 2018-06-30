@@ -864,3 +864,21 @@ Caching and MongoDB
 >
 > The ```cookie signing key``` is a secret string that is not shared with anyone outside of our application. A ```cookie signing key``` inside of the application is defined and is never leaked to the public. When we use the ```cookie signing key``` to mutate the session, to produce the ```session signature```. It gives us a unique signature that cannot be reverse engineered without knowing the actual ```cookie signing key```.
 >
+> The reason that the session signature is so important is that once the session comes into the application it is possible to reverse this equation, to be able to achieve creating a fake session for testing in chromium.
+>
+> In *development* the ```cookie signing key``` is defined in the ```dev.js``` file inside the ```config``` directory.
+>
+> ```
+> module.exports = {
+>  cookieKey: '123123123'
+>};
+> ```
+>
+> While in *production* the ```cookie signing key``` is defined in the ```prod.js``` file inside the ```config``` directory, as an ```environment variable```.
+>
+>```
+>module.exports = {
+>  cookieKey: process.env.COOKIE_KEY
+>};
+>```
+>
