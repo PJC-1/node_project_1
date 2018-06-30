@@ -856,3 +856,11 @@ Caching and MongoDB
 >
 > After **passport** is done with that, the request then goes on to whatever particular request handler is being executed inside of our application.
 >
+>**Session Signature**
+>
+>```session.sig``` property is our way to figure out whether or not someone has tampered with their session string.
+>
+>The ```session string``` added it together with the ```cookie signing key```. These two things put together and then run through a cryptographic function result in our ```session signature```.  
+>
+> The ```cookie signing key``` is a secret string that is not shared with anyone outside of our application. A ```cookie signing key``` inside of the application is defined and is never leaked to the public. When we use the ```cookie signing key``` to mutate the session, to produce the ```session signature```. It gives us a unique signature that cannot be reverse engineered without knowing the actual ```cookie signing key```.
+>
