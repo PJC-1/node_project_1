@@ -885,6 +885,58 @@ Caching and MongoDB
 >**Steps to fake a session for testing with Chromium**:
 >- Create Page instance
 >- Take an existing user ```ID``` and generate a fake session object with it.
+> You can obtain the user ```ID``` from the ```mongo shell```.
+> *Example*:
+> ```
+>{ "_id" : ObjectId("0a1234b5cde678910f11gh12"), "googleId" : "01234567891011112131415", "displayName" : "EXAMPLE_ID", "__v" : 0 }
+> ```
+> *Note*: Ensure that you are getting the ```_id``` of the user, and **not** the ```googleId``` of the user.
+> Create a variable within our new test that is set to the ```user _id``` string.
+> ```
+> test('When signed in, shows logout button', async () => {
+>  const id = '01234567891011112131415';
+>});
+> ```
+> Then, we're going to take that ```user _id``` and put it into a ```session object``` and turn that ```session object into an actual string just like the one we saw inside of our request log.
+> ```
+> test('When signed in, shows logout button', async () => {
+>  const id = '01234567891011112131415';
+>
+>  const Buffer = require('safe-buffer').Buffer;
+>  const sessionObject = {
+>    passport: {
+>      user: id
+>    }
+>  };
+>
+>  const sessionString = Buffer.from(
+>    JSON.stringify(sessionObject)
+>  ).toString('base64');
+>});
+> ```
 >- Sign the session object with keygrip.
+>```
+>test('When signed in, shows logout button', async () => {
+>  const id = '01234567891011112131415';
+>
+>  const Buffer = require('safe-buffer').Buffer;
+>  const sessionObject = {
+>    passport: {
+>      user: id
+>    }
+>  };
+>
+>  const sessionString = Buffer.from(
+>    JSON.stringify(sessionObject)
+>  ).toString('base64');
+>
+>  const Keygrip = require('keygrip');
+>  const keys = require('../config/keys');
+>  const keygrip = new Keygrip([keys.cookieKey]);
+>  const sig = keygrip.sign('session=' + sessionString);
+>
+>  console.log(sessionString, sig);
+>});
+>```
 >- Set the session and signature on our Page instance as cookies.
 >
