@@ -882,3 +882,9 @@ Caching and MongoDB
 >};
 >```
 >
+>**Steps to fake a session for testing with Chromium**:
+>- Create Page instance
+>- Take an existing user ```ID``` and generate a fake session object with it.
+>- Sign the session object with keygrip.
+>- Set the session and signature on our Page instance as cookies.
+>
