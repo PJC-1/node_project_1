@@ -939,4 +939,32 @@ Caching and MongoDB
 >});
 >```
 >- Set the session and signature on our Page instance as cookies.
+>```
+>test.only('When signed in, shows logout button', async () => {
+>  const id = '01234567891011112131415';
+>
+>  const Buffer = require('safe-buffer').Buffer;
+>  const sessionObject = {
+>    passport: {
+>      user: id
+>    }
+>  };
+>
+>  const sessionString = Buffer.from(
+>    JSON.stringify(sessionObject)
+>  ).toString('base64');
+>
+>  const Keygrip = require('keygrip');
+>  const keys = require('../config/keys');
+>  const keygrip = new Keygrip([keys.cookieKey]);
+>  const sig = keygrip.sign('session=' + sessionString);
+>
+>  await page.setCookie({ name: 'session', value: sessionString });
+>  await page.setCookie({ name: 'session.sig', value: sig });
+>  await page.goto('localhost:3000');
+>});
+>```
+>
+> If we also *remove/comment-out* the ```await browser.close();``` line from the ```afterEach``` statement, we can take a look at the *chromium browser* to ensure that the user has authenticated successfully and is logged in.
+>
 >
