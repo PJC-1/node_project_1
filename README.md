@@ -968,3 +968,52 @@ Caching and MongoDB
 > If we also *remove/comment-out* the ```await browser.close();``` line from the ```afterEach``` statement, we can take a look at the *chromium browser* to ensure that the user has authenticated successfully and is logged in.
 >
 >
+>**Using selector to find a DOM Element based on attribute value**
+>
+>We can use a specific *syntax* to grab a ```DOM element``` based on the *value* of the elements *attribute*. **Example** (*if we were grabbing an anchor tag with the attribute ```href="/auth/logout```*):
+>```
+> $('a[href="/auth/logout"]')
+>> <a href="/auth/logout">Logout</a>
+>```
+> This is helpful when attempting to grab a DOM Element that is one of multiple *child elements* of the same ```HTML tag```.
+>
+> **Factory Function**
+>
+> The idea of a **factory** is a **function** that is used to generate some test data. It is a function that *creates* and *returns* some common resource that we might want to use throughout our test suite.
+>
+>
+> **JavaScript Proxy**
+>
+> The [**Proxy**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Proxy) object is used to define custom behavior for fundamental operations (e.g. property lookup, assignment, enumeration, function invocation, etc).
+>
+>In other words, the *proxy* help manage access to some *target* object or multiple target objects.
+>
+> Example:
+> ```
+> class Greetings {
+>  english() { return 'hello'; }
+>  spanish() { return 'hola'; }
+>}
+>
+>class MoreGreetings {
+>  german() { return 'hallo'; }
+>  french() { return 'bonjour'; }
+>}
+>
+>const greetings = new Greetings();
+>const moreGreetings = new MoreGreetings();
+>
+>const allGreetings = new Proxy(moreGreetings, {
+>  get: function(target, property) {
+>    return target[property] || greetings[property]
+>  }
+>});
+>
+>console.log(allGreetings.english())
+> ```
+>
+> Example output:
+> ```
+> "hello"
+> ```
+> 
