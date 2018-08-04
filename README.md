@@ -1016,4 +1016,14 @@ Caching and MongoDB
 > ```
 > "hello"
 > ```
+>
+> **JavaScript Static Function**
+>
+> The [**static**](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static) keyword defines a static method for a class. *Static* methods aren't called on instances of the class. Instead, they're called on the class itself. These are often utility functions, such as functions to create or clone objects.
+>
+>**Describe Statement**
+>
+>A **describe statement** is used to group together sets of very common tests that all share some similar testing setup logic.
+>
+>A *describe statement* can also have a **before each** or an **after each** statement, which are used to setup very common conditions that are shared for all the tests that exist inside of it.
 > 
