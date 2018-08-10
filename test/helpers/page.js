@@ -49,6 +49,20 @@ class CustomPage {
     }, path);
   }
 
+  post(path, data) {
+    return this.page.evaluate(
+      (_path, _data) => {
+        return fetch(_path, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Types': 'application/json'
+          },
+          body: JSON.stringify(_data)
+        }).then(res => res.json());
+    }, path, data);
+  }
+
 }
 
 module.exports = CustomPage;
