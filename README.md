@@ -1026,4 +1026,53 @@ Caching and MongoDB
 >A **describe statement** is used to group together sets of very common tests that all share some similar testing setup logic.
 >
 >A *describe statement* can also have a **before each** or an **after each** statement, which are used to setup very common conditions that are shared for all the tests that exist inside of it.
-> 
+>
+
+Continuous Integration
+-------------
+>
+>**What is CI?**
+>*Process to merge all code changes into a single branch*
+>
+>**What is a CI server?**
+>*Server that runs automatic checks (tests) on the codebase to ensure the changes haven't broken anything*
+>
+>**CI Flow**
+>1. Developer pushes code to github.
+>2. *CI Server* detects that a new push of code has occurred.
+>3. *CI Server* clones project to a cloud-based virtual machine.
+>4. *CI Server* runs all tests.
+>5. If all tests pass, *CI Server* marks build as 'passing' and does some optional followup (i.e. Send an email, automatically deploy, put notification on Github, etc...).
+>
+>**Travis CI**
+>
+>[Official Travis CI documentation](docs.travis-ci.com)
+>
+>```.travis.yml``` file will contain all of the configuration.
+>
+>
+>
+>
+
+JavaScript (general concepts)
+-------------
+>
+>**for...of**
+>
+>[Mozilla documentation on for...of statement](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...of)
+>
+>The ```for...of``` statement creates a loop iterating over *iterable objects* (including the build-in ```String```, ```Array```, e.g. the *Array-like arguments* or *NodeList* objects, *TypedArray*, *Map*, and *Set*, and user-defined iterables), invoking a custom iteration hook with statements to be executed for the value of each distinct property of the object.
+>
+>**Example: Iterating over an Array**
+>```
+>let iterable = [10, 20, 30];
+>
+>for (let value of iterable) {
+>  value += 1;
+>  console.log(value);
+>}
+>// 11
+>// 21
+>// 31
+>```
+>
