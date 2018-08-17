@@ -1076,3 +1076,19 @@ JavaScript (general concepts)
 >// 31
 >```
 >
+
+Image Upload
+-------------
+>
+> We will use [AWS S3](https://aws.amazon.com/s3/) as a storage solution.
+>
+> Instead of using a workflow that utilizes the local storage of the hosting server (i.e. *Digital Ocean*) as a temporary storage of the image file before sending it to AWS S3, we will use the following workflow:
+>- **Client** tells **server** it needs to upload a file to **S3**. It will include some information, like *file name* and *file type*.
+>- **Server** will ask **s3** for a ```presigned URL```.
+>- **S3** gives the **server** a ```presigned URL```. Which works *only* for a file matching the original file name.
+>- **Server** sends url to **React client**.
+>- **React client** uploads image file directory to **s3** server.
+>- **React client** tells server that the upload was successful. **Server** saves the URL of that new image with the blog post.
+>
+> The big benefit with this approach over the "*Hosting server's local storage*" method is that by skipping the "*middle man*" you relieve the server of having to use resources (i.e. *CPU* or *RAM*) to make the transfer of the file from the server's temporary storage to **s3**'s storage. In fact, using this approach will barely use our **server** for the image upload.
+>   
